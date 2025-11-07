@@ -23,6 +23,9 @@ function appendToDisplay(value) {
   if (value === '*') {
     display.value = display.value.slice(0, -1) + '×';
   }
+
+  // Remove error styling when user starts typing
+  display.classList.remove('error-text');
 }
 
 function clearDisplay() {
@@ -31,6 +34,7 @@ function clearDisplay() {
   operator = '';
   previousInput = '';
   shouldResetDisplay = false;
+  display.classList.remove('error-text');
 }
 
 function deleteLast() {
@@ -41,31 +45,64 @@ function deleteLast() {
   }
 }
 
+// Safer mathematical expression evaluator
+function safeEvaluate(expression) {
+  // Enhanced validation - check for valid mathematical expression
+  if (!/^[0-9+\-*/.() ]+$/.test(expression)) {
+    throw new Error('Invalid characters in expression');
+  }
+
+  // Check for consecutive operators (except minus after operators for negative numbers)
+  if (/[+\-*/]{2,}/.test(expression.replace(/[+\-*/]-/g, ''))) {
+    throw new Error('Invalid operator sequence');
+  }
+
+  // Check for multiple decimal points in a number
+  if (/\d+\.\d*\.\d*/.test(expression)) {
+    throw new Error('Invalid decimal format');
+  }
+
+  // Use Function constructor with restricted scope - safer than eval
+  try {
+    const result = Function(`"use strict"; return (${expression})`)();
+    return result;
+  } catch (error) {
+    throw new Error('Mathematical error');
+  }
+}
+
 function calculateResult() {
   try {
     // Replace × with * for evaluation
     let expression = display.value.replace(/×/g, '*');
 
-    // Basic validation to prevent code injection
-    if (!/^[0-9+\-*/.() ]+$/.test(expression)) {
-      throw new Error('Invalid expression');
-    }
-
-    // Evaluate the expression
-    let result = eval(expression);
+    // Evaluate using safer method
+    let result = safeEvaluate(expression);
 
     // Handle division by zero and other edge cases
     if (!isFinite(result)) {
-      display.value = 'Error';
+      if (isNaN(result)) {
+        display.value = 'Invalid operation';
+      } else {
+        display.value = 'Cannot divide by zero';
+      }
+      display.classList.add('error-text');
     } else {
       // Round to 10 decimal places to avoid floating point errors
       result = Math.round(result * 10000000000) / 10000000000;
       display.value = result.toString();
+      display.classList.remove('error-text');
     }
 
     shouldResetDisplay = true;
   } catch (error) {
-    display.value = 'Error';
+    // More specific error messages based on error type
+    if (error.message.includes('Invalid')) {
+      display.value = error.message;
+    } else {
+      display.value = 'Error';
+    }
+    display.classList.add('error-text');
     shouldResetDisplay = true;
   }
 }

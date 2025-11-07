@@ -121,6 +121,10 @@ body.dark-mode {
   letter-spacing: 1px;
 }
 
+#display.error-text {
+  font-size: 18px;
+}
+
 .buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -204,5 +208,9 @@ body.dark-mode {
   #display {
     height: 60px;
     font-size: 24px;
+  }
+
+  #display.error-text {
+    font-size: 16px;
   }
 }
