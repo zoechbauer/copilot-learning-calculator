@@ -13,11 +13,11 @@
 
 ### Setup Tasks
 
-- [ ] Install Jest dependencies (`npm install --save-dev jest`)
-- [ ] Install jsdom (`npm install --save-dev @testing-library/dom @testing-library/jest-dom`)
-- [ ] Create `jest.config.js`
-- [ ] Create `package.json` test scripts
-- [ ] Create test file structure
+- [x] Install Jest dependencies (`npm install --save-dev jest`)
+- [x] Install jsdom (`npm install --save-dev @testing-library/dom @testing-library/jest-dom`)
+- [x] Create `jest.config.js`
+- [x] Create `package.json` test scripts
+- [x] Create test file structure
 
 ---
 
@@ -271,12 +271,12 @@
 
 ### Created
 
-- [ ] `jest.config.js`
-- [ ] `script.test.js`
-- [ ] `dom.test.js`
-- [ ] `theme.test.js`
-- [ ] `keyboard.test.js`
-- [ ] `e2e.spec.js`
+- [x] `jest.config.js`
+- [x] `script.test.js`
+- [x] `dom.test.js`
+- [x] `theme.test.js`
+- [x] `keyboard.test.js`
+- [x] `e2e.spec.js`
 
 ### Coverage Reports
 
@@ -292,9 +292,9 @@
 
 ### Phase 1: Foundation (Target: Week 1)
 
-- [ ] Setup complete
-- [ ] First test file created
-- [ ] First test passing
+- [x] Setup complete
+- [x] First test file created
+- [x] First test passing
 - [ ] Coverage reporting working
 
 ### Phase 2: Core Functions (Target: Week 2)
