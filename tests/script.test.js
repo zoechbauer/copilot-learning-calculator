@@ -27,6 +27,24 @@ describe('appendToDisplay() Function', () => {
         shouldResetDisplay = false;
       }
 
+      // Prevent multiple decimal points in the same number
+      if (value === '.') {
+        // Get the current number (everything after the last operator)
+        const lastOperatorIndex = Math.max(
+          display.value.lastIndexOf('+'),
+          display.value.lastIndexOf('-'),
+          display.value.lastIndexOf('×'),
+          display.value.lastIndexOf('*'),
+          display.value.lastIndexOf('/')
+        );
+        const currentNumber = display.value.substring(lastOperatorIndex + 1);
+        
+        // Don't append if current number already has a decimal point
+        if (currentNumber.includes('.')) {
+          return;
+        }
+      }
+
       if (display.value === '0' && value !== '.') {
         display.value = value;
       } else {
@@ -67,9 +85,15 @@ describe('appendToDisplay() Function', () => {
     test('Should not append multiple decimal points in same number', () => {
       display.value = '5.2';
       appendToDisplay('.');
-      // The current implementation allows this at append time
-      // The validation happens in safeEvaluate during calculation
-      expect(display.value).toBe('5.2.');
+      // Should NOT append - prevents multiple decimals in same number
+      expect(display.value).toBe('5.2');
+    });
+
+    test('Should allow decimal point in new number after operator', () => {
+      display.value = '5.2+3';
+      appendToDisplay('.');
+      // Should append - this is a new number after the + operator
+      expect(display.value).toBe('5.2+3.');
     });
   });
 });
