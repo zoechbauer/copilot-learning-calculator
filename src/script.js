@@ -13,6 +13,24 @@ function appendToDisplay(value) {
     shouldResetDisplay = false;
   }
 
+  // Prevent multiple decimal points in the same number
+  if (value === '.') {
+    // Get the current number (everything after the last operator)
+    const lastOperatorIndex = Math.max(
+      display.value.lastIndexOf('+'),
+      display.value.lastIndexOf('-'),
+      display.value.lastIndexOf('×'),
+      display.value.lastIndexOf('*'),
+      display.value.lastIndexOf('/')
+    );
+    const currentNumber = display.value.substring(lastOperatorIndex + 1);
+    
+    // Don't append if current number already has a decimal point
+    if (currentNumber.includes('.')) {
+      return;
+    }
+  }
+
   if (display.value === '0' && value !== '.') {
     display.value = value;
   } else {

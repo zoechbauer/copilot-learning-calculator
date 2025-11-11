@@ -1,6 +1,6 @@
 ### By Category:
 
-- [ ] Unit Tests: 0/85
+- [ ] Unit Tests: 4/85
 - [ ] DOM Integration: 0/36
 - [ ] Edge Cases: 0/19
 - [ ] E2E Tests: 0/18
@@ -29,10 +29,10 @@
 
 ##### `appendToDisplay(value)` - 12 tests
 
-- [ ] Should append number to empty display (0 → value)
-- [ ] Should append number to existing value
-- [ ] Should append decimal point
-- [ ] Should not append multiple decimal points in same number
+- [x] Should append number to empty display (0 → value)
+- [x] Should append number to existing value
+- [x] Should append decimal point
+- [x] Should not append multiple decimal points in same number
 - [ ] Should replace display when `shouldResetDisplay` is true
 - [ ] Should display '×' symbol when '\*' is appended
 - [ ] Should remove error styling when appending
