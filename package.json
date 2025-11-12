@@ -1,15 +1,16 @@
 {
   "name": "calculator",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "directories": {
     "doc": "docs",
     "test": "tests"
   },
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
+    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
     "test:integration": "jest --testMatch='**/tests/**/*.integration.test.js'",
     "test:e2e": "jest --testMatch='**/tests/**/*.e2e.spec.js'"
   },

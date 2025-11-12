@@ -5,11 +5,17 @@ let previousInput = '';
 let shouldResetDisplay = false;
 
 // Initialize display
-display.value = '0';
+if (display) {
+  display.value = '0';
+}
 
-function appendToDisplay(value) {
+export function appendToDisplay(value) {
+  // Get display dynamically to support testing
+  const displayElement = display || document.getElementById('display');
+  if (!displayElement) return;
+
   if (shouldResetDisplay) {
-    display.value = '';
+    displayElement.value = '';
     shouldResetDisplay = false;
   }
 
@@ -17,54 +23,60 @@ function appendToDisplay(value) {
   if (value === '.') {
     // Get the current number (everything after the last operator)
     const lastOperatorIndex = Math.max(
-      display.value.lastIndexOf('+'),
-      display.value.lastIndexOf('-'),
-      display.value.lastIndexOf('×'),
-      display.value.lastIndexOf('*'),
-      display.value.lastIndexOf('/')
+      displayElement.value.lastIndexOf('+'),
+      displayElement.value.lastIndexOf('-'),
+      displayElement.value.lastIndexOf('×'),
+      displayElement.value.lastIndexOf('*'),
+      displayElement.value.lastIndexOf('/')
     );
-    const currentNumber = display.value.substring(lastOperatorIndex + 1);
-    
+    const currentNumber = displayElement.value.substring(lastOperatorIndex + 1);
+
     // Don't append if current number already has a decimal point
     if (currentNumber.includes('.')) {
       return;
     }
   }
 
-  if (display.value === '0' && value !== '.') {
-    display.value = value;
+  if (displayElement.value === '0' && value !== '.') {
+    displayElement.value = value;
   } else {
-    display.value += value;
+    displayElement.value += value;
   }
 
   // Replace × with * for calculation
   if (value === '*') {
-    display.value = display.value.slice(0, -1) + '×';
+    displayElement.value = displayElement.value.slice(0, -1) + '×';
   }
 
   // Remove error styling when user starts typing
-  display.classList.remove('error-text');
+  displayElement.classList.remove('error-text');
 }
 
-function clearDisplay() {
-  display.value = '0';
+export function clearDisplay() {
+  const displayElement = display || document.getElementById('display');
+  if (!displayElement) return;
+
+  displayElement.value = '0';
   currentInput = '';
   operator = '';
   previousInput = '';
   shouldResetDisplay = false;
-  display.classList.remove('error-text');
+  displayElement.classList.remove('error-text');
 }
 
-function deleteLast() {
-  if (display.value.length > 1) {
-    display.value = display.value.slice(0, -1);
+export function deleteLast() {
+  const displayElement = display || document.getElementById('display');
+  if (!displayElement) return;
+
+  if (displayElement.value.length > 1) {
+    displayElement.value = displayElement.value.slice(0, -1);
   } else {
-    display.value = '0';
+    displayElement.value = '0';
   }
 }
 
 // Safer mathematical expression evaluator
-function safeEvaluate(expression) {
+export function safeEvaluate(expression) {
   // Enhanced validation - check for valid mathematical expression
   if (!/^[0-9+\-*/.() ]+$/.test(expression)) {
     throw new Error('Invalid characters in expression');
@@ -89,10 +101,13 @@ function safeEvaluate(expression) {
   }
 }
 
-function calculateResult() {
+export function calculateResult() {
+  const displayElement = display || document.getElementById('display');
+  if (!displayElement) return;
+
   try {
     // Replace × with * for evaluation
-    let expression = display.value.replace(/×/g, '*');
+    let expression = displayElement.value.replace(/×/g, '*');
 
     // Evaluate using safer method
     let result = safeEvaluate(expression);
@@ -100,94 +115,101 @@ function calculateResult() {
     // Handle division by zero and other edge cases
     if (!isFinite(result)) {
       if (isNaN(result)) {
-        display.value = 'Invalid operation';
+        displayElement.value = 'Invalid operation';
       } else {
-        display.value = 'Cannot divide by zero';
+        displayElement.value = 'Cannot divide by zero';
       }
-      display.classList.add('error-text');
+      displayElement.classList.add('error-text');
     } else {
       // Round to 10 decimal places to avoid floating point errors
       result = Math.round(result * 10000000000) / 10000000000;
-      display.value = result.toString();
-      display.classList.remove('error-text');
+      displayElement.value = result.toString();
+      displayElement.classList.remove('error-text');
     }
 
     shouldResetDisplay = true;
   } catch (error) {
     // More specific error messages based on error type
     if (error.message.includes('Invalid')) {
-      display.value = error.message;
+      displayElement.value = error.message;
     } else {
-      display.value = 'Error';
+      displayElement.value = 'Error';
     }
-    display.classList.add('error-text');
+    displayElement.classList.add('error-text');
     shouldResetDisplay = true;
   }
 }
 
-// Keyboard support
-document.addEventListener('keydown', function (event) {
-  const key = event.key;
+// Initialize event listeners only if not in test environment
+if (typeof process === 'undefined' || process.env.NODE_ENV !== 'test') {
+  // Keyboard support
+  document.addEventListener('keydown', function (event) {
+    const key = event.key;
 
-  // Numbers and decimal point
-  if ((key >= '0' && key <= '9') || key === '.') {
-    appendToDisplay(key);
+    // Numbers and decimal point
+    if ((key >= '0' && key <= '9') || key === '.') {
+      appendToDisplay(key);
+    }
+
+    // Operators
+    else if (key === '+' || key === '-' || key === '/') {
+      appendToDisplay(key);
+    } else if (key === '*') {
+      appendToDisplay('*');
+    }
+
+    // Enter or equals for calculation
+    else if (key === 'Enter' || key === '=') {
+      event.preventDefault();
+      calculateResult();
+    }
+
+    // Escape or 'c' for clear
+    else if (key === 'Escape' || key.toLowerCase() === 'c') {
+      clearDisplay();
+    }
+
+    // Backspace for delete
+    else if (key === 'Backspace') {
+      event.preventDefault();
+      deleteLast();
+    }
+  });
+
+  // Prevent invalid characters from being typed
+  if (display) {
+    display.addEventListener('input', function (event) {
+      // Allow only numbers, operators, and decimal points
+      this.value = this.value.replace(/[^0-9+\-*/().×]/g, '');
+    });
   }
 
-  // Operators
-  else if (key === '+' || key === '-' || key === '/') {
-    appendToDisplay(key);
-  } else if (key === '*') {
-    appendToDisplay('*');
+  // Theme Toggle Functionality
+  const themeToggle = document.getElementById('themeToggle');
+  const body = document.body;
+
+  if (themeToggle && body) {
+    // Check for saved theme preference or default to light mode
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') {
+      body.classList.add('dark-mode');
+      themeToggle.textContent = '☀️';
+    } else {
+      themeToggle.textContent = '🌙';
+    }
+
+    // Theme toggle event listener
+    themeToggle.addEventListener('click', function () {
+      body.classList.toggle('dark-mode');
+
+      // Update button icon and save preference
+      if (body.classList.contains('dark-mode')) {
+        themeToggle.textContent = '☀️';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        themeToggle.textContent = '🌙';
+        localStorage.setItem('theme', 'light');
+      }
+    });
   }
-
-  // Enter or equals for calculation
-  else if (key === 'Enter' || key === '=') {
-    event.preventDefault();
-    calculateResult();
-  }
-
-  // Escape or 'c' for clear
-  else if (key === 'Escape' || key.toLowerCase() === 'c') {
-    clearDisplay();
-  }
-
-  // Backspace for delete
-  else if (key === 'Backspace') {
-    event.preventDefault();
-    deleteLast();
-  }
-});
-
-// Prevent invalid characters from being typed
-display.addEventListener('input', function (event) {
-  // Allow only numbers, operators, and decimal points
-  this.value = this.value.replace(/[^0-9+\-*/().×]/g, '');
-});
-
-// Theme Toggle Functionality
-const themeToggle = document.getElementById('themeToggle');
-const body = document.body;
-
-// Check for saved theme preference or default to light mode
-const savedTheme = localStorage.getItem('theme') || 'light';
-if (savedTheme === 'dark') {
-  body.classList.add('dark-mode');
-  themeToggle.textContent = '☀️';
-} else {
-  themeToggle.textContent = '🌙';
 }
-
-// Theme toggle event listener
-themeToggle.addEventListener('click', function () {
-  body.classList.toggle('dark-mode');
-
-  // Update button icon and save preference
-  if (body.classList.contains('dark-mode')) {
-    themeToggle.textContent = '☀️';
-    localStorage.setItem('theme', 'dark');
-  } else {
-    themeToggle.textContent = '🌙';
-    localStorage.setItem('theme', 'light');
-  }
-});

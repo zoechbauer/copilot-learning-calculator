@@ -1,6 +1,7 @@
-module.exports = {
+export default {
   testEnvironment: 'jsdom',
   testMatch: ['**/tests/**/*.test.js'],
+  transform: {},
   collectCoverageFrom: [
     'src/**/*.js',
     '!src/index.html',

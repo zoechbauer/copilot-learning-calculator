@@ -1,11 +1,10 @@
 /**
  * Unit tests for script.js calculator functions
  */
+import { appendToDisplay } from '../src/script.js';
 
 describe('appendToDisplay() Function', () => {
   let display;
-  let shouldResetDisplay;
-  let appendToDisplay;
 
   beforeEach(() => {
     // Set up a fresh DOM for each test
@@ -13,52 +12,9 @@ describe('appendToDisplay() Function', () => {
       <input type="text" id="display" value="0" readonly>
       <button id="themeToggle">🌙</button>
     `;
-    
+
     // Get display element reference
     display = document.getElementById('display');
-    
-    // Mock global state variables
-    shouldResetDisplay = false;
-    
-    // Define the appendToDisplay function from script.js
-    appendToDisplay = function(value) {
-      if (shouldResetDisplay) {
-        display.value = '';
-        shouldResetDisplay = false;
-      }
-
-      // Prevent multiple decimal points in the same number
-      if (value === '.') {
-        // Get the current number (everything after the last operator)
-        const lastOperatorIndex = Math.max(
-          display.value.lastIndexOf('+'),
-          display.value.lastIndexOf('-'),
-          display.value.lastIndexOf('×'),
-          display.value.lastIndexOf('*'),
-          display.value.lastIndexOf('/')
-        );
-        const currentNumber = display.value.substring(lastOperatorIndex + 1);
-        
-        // Don't append if current number already has a decimal point
-        if (currentNumber.includes('.')) {
-          return;
-        }
-      }
-
-      if (display.value === '0' && value !== '.') {
-        display.value = value;
-      } else {
-        display.value += value;
-      }
-
-      // Replace × with * for calculation
-      if (value === '*') {
-        display.value = display.value.slice(0, -1) + '×';
-      }
-
-      // Remove error styling when user starts typing
-      display.classList.remove('error-text');
-    };
   });
 
   describe('Basic number appending', () => {
