@@ -1,6 +1,6 @@
 ### By Category:
 
-- [ ] Unit Tests: 12/85
+- [ ] Unit Tests: 21/85
 - [ ] DOM Integration: 0/36
 - [ ] Edge Cases: 0/19
 - [ ] E2E Tests: 0/18
@@ -44,19 +44,19 @@
 
 ##### `clearDisplay()` - 5 tests
 
-- [ ] Should reset display to '0'
-- [ ] Should clear currentInput variable
-- [ ] Should clear operator variable
-- [ ] Should clear previousInput variable
-- [ ] Should reset shouldResetDisplay flag
-- [ ] Should remove error styling
+- [x] Should reset display to '0'
+- [x] Should clear currentInput variable
+- [x] Should clear operator variable
+- [x] Should clear previousInput variable
+- [x] Should reset shouldResetDisplay flag
+- [x] Should remove error styling
 
 ##### `deleteLast()` - 4 tests
 
-- [ ] Should remove last character from multi-digit number
-- [ ] Should reset to '0' when deleting last character
-- [ ] Should handle deletion of operators
-- [ ] Should handle deletion from '0' (no change)
+- [x] Should remove last character from multi-digit number
+- [x] Should reset to '0' when deleting last character
+- [x] Should handle deletion of operators
+- [x] Should handle deletion from '0' (no change)
 
 ---
 
