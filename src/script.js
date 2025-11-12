@@ -4,6 +4,15 @@ let operator = '';
 let previousInput = '';
 let shouldResetDisplay = false;
 
+// Export state getters/setters for testing
+export function getShouldResetDisplay() {
+  return shouldResetDisplay;
+}
+
+export function setShouldResetDisplay(value) {
+  shouldResetDisplay = value;
+}
+
 // Initialize display
 if (display) {
   display.value = '0';

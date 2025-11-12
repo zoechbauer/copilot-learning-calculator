@@ -1,6 +1,6 @@
 ### By Category:
 
-- [ ] Unit Tests: 4/85
+- [ ] Unit Tests: 12/85
 - [ ] DOM Integration: 0/36
 - [ ] Edge Cases: 0/19
 - [ ] E2E Tests: 0/18
@@ -33,14 +33,14 @@
 - [x] Should append number to existing value
 - [x] Should append decimal point
 - [x] Should not append multiple decimal points in same number
-- [ ] Should replace display when `shouldResetDisplay` is true
-- [ ] Should display '×' symbol when '\*' is appended
-- [ ] Should remove error styling when appending
-- [ ] Should handle operators (+, -, /, \*)
-- [ ] Should replace '0' with first digit
-- [ ] Should not replace '0.' with digit (keep decimal)
-- [ ] Should append to multi-digit numbers
-- [ ] Should handle consecutive operator appends
+- [x] Should replace display when `shouldResetDisplay` is true
+- [x] Should display '×' symbol when '\*' is appended
+- [x] Should remove error styling when appending
+- [x] Should handle operators (+, -, /, \*)
+- [x] Should replace '0' with first digit
+- [x] Should not replace '0.' with digit (keep decimal)
+- [x] Should append to multi-digit numbers
+- [x] Should handle consecutive operator appends
 
 ##### `clearDisplay()` - 5 tests
 
