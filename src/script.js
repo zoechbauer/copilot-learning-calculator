@@ -13,6 +13,18 @@ export function setShouldResetDisplay(value) {
   shouldResetDisplay = value;
 }
 
+export function getCurrentInput() {
+  return currentInput;
+}
+
+export function getOperator() {
+  return operator;
+}
+
+export function getPreviousInput() {
+  return previousInput;
+}
+
 // Initialize display
 if (display) {
   display.value = '0';

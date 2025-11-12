@@ -1,7 +1,16 @@
 /**
  * Unit tests for script.js calculator functions
  */
-import { appendToDisplay, setShouldResetDisplay } from '../src/script.js';
+import {
+  appendToDisplay,
+  setShouldResetDisplay,
+  clearDisplay,
+  deleteLast,
+  getShouldResetDisplay,
+  getCurrentInput,
+  getOperator,
+  getPreviousInput,
+} from '../src/script.js';
 
 describe('appendToDisplay() Function', () => {
   let display;
@@ -134,5 +143,96 @@ describe('appendToDisplay() Function', () => {
       appendToDisplay('+');
       expect(display.value).toBe('10×+');
     });
+  });
+});
+
+describe('clearDisplay() Function', () => {
+  let display;
+
+  beforeEach(() => {
+    // Set up a fresh DOM for each test
+    document.body.innerHTML = `
+      <input type="text" id="display" value="0" readonly>
+      <button id="themeToggle">🌙</button>
+    `;
+
+    // Get display element reference
+    display = document.getElementById('display');
+  });
+
+  test('Should reset display to 0', () => {
+    display.value = '12345';
+    clearDisplay();
+    expect(display.value).toBe('0');
+  });
+
+  test('Should clear currentInput variable', () => {
+    display.value = '42';
+    clearDisplay();
+    expect(getCurrentInput()).toBe('');
+  });
+
+  test('Should clear operator variable', () => {
+    display.value = '5+3';
+    clearDisplay();
+    expect(getOperator()).toBe('');
+  });
+
+  test('Should clear previousInput variable', () => {
+    display.value = '99';
+    clearDisplay();
+    expect(getPreviousInput()).toBe('');
+  });
+
+  test('Should reset shouldResetDisplay flag', () => {
+    setShouldResetDisplay(true);
+    clearDisplay();
+    expect(getShouldResetDisplay()).toBe(false);
+  });
+
+  test('Should remove error styling', () => {
+    display.value = 'Error';
+    display.classList.add('error-text');
+    clearDisplay();
+    expect(display.classList.contains('error-text')).toBe(false);
+  });
+});
+
+describe('deleteLast() Function', () => {
+  let display;
+
+  beforeEach(() => {
+    // Set up a fresh DOM for each test
+    document.body.innerHTML = `
+      <input type="text" id="display" value="0" readonly>
+      <button id="themeToggle">🌙</button>
+    `;
+
+    // Get display element reference
+    display = document.getElementById('display');
+  });
+
+  test('Should remove last character from multi-digit number', () => {
+    display.value = '12345';
+    deleteLast();
+    expect(display.value).toBe('1234');
+  });
+
+  test('Should reset to 0 when deleting last character', () => {
+    display.value = '7';
+    deleteLast();
+    expect(display.value).toBe('0');
+  });
+
+  test('Should handle deletion of operators', () => {
+    display.value = '5+3×';
+    deleteLast();
+    expect(display.value).toBe('5+3');
+  });
+
+  test('Should handle deletion from 0 (no change)', () => {
+    display.value = '0';
+    deleteLast();
+    expect(display.value).toBe('0');
   });
 });
