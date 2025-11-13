@@ -138,6 +138,26 @@ export default {
 };
 ```
 
+### Jest ES Modules Debugging: Required Debug Configuration
+
+To debug ES module tests in Jest, your `.vscode/launch.json` must include the ESM loader flag:
+
+```json
+{
+  "type": "node",
+  "request": "launch",
+  "name": "Debug Jest Tests",
+  "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
+  "args": ["--runInBand", "tests/script.test.js"],
+  "runtimeArgs": ["--experimental-vm-modules"],
+  "console": "integratedTerminal",
+  "autoAttachChildProcesses": true
+}
+```
+To execute a particular test file with Jest, set the following in your launch configuration:
+"args": ["--runInBand", "tests/script.test.js"],
+- Restart VS Code after making these changes.
+
 #### `index.html`
 
 ```html
