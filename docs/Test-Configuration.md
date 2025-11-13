@@ -164,6 +164,29 @@ To execute a particular test file with Jest, set the following in your launch co
 <script type="module" src="script.js"></script>
 ```
 
+### Making ES Module Functions Available to Inline Event Handlers
+
+When using ES modules (`export function ...`) in `script.js` and loading it with `<script type="module" src="script.js"></script>`, exported functions are **not** automatically available on the global `window` object.  
+However, inline event handlers in HTML (e.g., `onclick="appendToDisplay(...)"`) expect these functions to be global.
+
+**To fix this, add the following code at the end of `src/script.js`:**
+
+```javascript
+// Make functions available for inline event handlers
+window.appendToDisplay = appendToDisplay;
+window.clearDisplay = clearDisplay;
+window.deleteLast = deleteLast;
+window.calculateResult = calculateResult;
+```
+
+**Reasons:**
+- ES module exports are only available to other modules via `import`.
+- Inline event handlers (`onclick="..."`) look for functions on the global `window` or `globalThis` object.
+- Attaching functions to `window` or `globalThis` ensures your calculator buttons work as expected in the browser.
+
+**Summary:**  
+Always attach exported functions to `window` if you use inline event handlers in your HTML and ES modules for your scripts.
+
 ### Key Technical Patterns
 
 #### Dynamic Element Resolution
