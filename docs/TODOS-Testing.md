@@ -346,6 +346,23 @@
 6. Finish with DOM integration - full stack
 7. Complete with E2E - real-world scenarios
 
+### 🟢 Copilot Premium Request Minimization Strategy
+
+To reduce Copilot premium requests when implementing tests:
+
+- **Batch your test work into larger PRs.**
+  - Recommended: 1 PR per major category (Unit Tests, DOM Integration, Edge Cases, E2E, UI/UX)
+  - Alternatively: 1 PR per sprint/milestone (Foundation, Core Functions, Integration, Polish, E2E)
+- Example breakdown:
+  - 1 PR for all unit tests
+  - 1 PR for DOM integration tests
+  - 1 PR for edge cases and security
+  - 1 PR for UI/UX and E2E
+- This approach means you only need 4–5 PRs for the entire test suite, greatly reducing premium requests.
+- **Tip:** Review and batch changes locally, then open a PR when a significant chunk is ready.
+
+_Batching PRs keeps your Copilot premium usage low and your workflow efficient._
+
 ---
 
 ## 🐛 Known Issues / Blockers
