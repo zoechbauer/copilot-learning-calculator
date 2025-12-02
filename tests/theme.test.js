@@ -3,19 +3,14 @@
  */
 
 describe('Theme Functionality', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     // Set up DOM elements expected by the script before importing the module
     document.body.innerHTML = `
       <input type="text" id="display" value="0" readonly>
       <button id="themeToggle">🌙</button>
     `;
-
-    // Ensure a clean slate for localStorage
     localStorage.clear();
-
-    // Reset modules so requiring the script registers event listeners fresh
-    jest.resetModules();
-    require('../src/script.js');
+    await import('../src/script.js');
   });
 
   afterEach(() => {
@@ -43,12 +38,9 @@ describe('Theme Functionality', () => {
     expect(localStorage.getItem('theme')).toBe('light');
   });
 
-  test('Loads saved theme on init', () => {
-    // simulate saved preference before module init
+  test('Loads saved theme on init', async () => {
     localStorage.setItem('theme', 'dark');
-
-    jest.resetModules();
-    require('../src/script.js');
+    await import('../src/script.js');
 
     expect(document.body.classList.contains('dark-mode')).toBe(true);
     const themeToggle = document.getElementById('themeToggle');

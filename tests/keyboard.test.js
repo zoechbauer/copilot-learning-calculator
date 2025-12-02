@@ -3,16 +3,13 @@
  */
 
 describe('Keyboard Event Handler', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     // Set up DOM expected by the script before importing
     document.body.innerHTML = `
       <input type="text" id="display" value="0" readonly>
       <button id="themeToggle">🌙</button>
     `;
-
-    // Reset modules so the script registers event listeners on import
-    jest.resetModules();
-    require('../src/script.js');
+    await import('../src/script.js');
   });
 
   test('Should calculate on Enter key', () => {
