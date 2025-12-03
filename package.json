@@ -8,11 +8,11 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
-    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
-    "test:integration": "jest --testMatch='**/tests/**/*.integration.test.js'",
-    "test:e2e": "jest --testMatch='**/tests/**/*.e2e.spec.js'"
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.cjs",
+    "test:watch": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.cjs --watch",
+    "test:coverage": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.cjs --coverage",
+    "test:integration": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.cjs --testMatch='**/tests/**/*.integration.test.js'",
+    "test:e2e": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.cjs --testMatch='**/tests/**/*.e2e.spec.js'"
   },
   "keywords": [],
   "author": "",
