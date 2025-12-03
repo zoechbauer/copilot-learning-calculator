@@ -341,6 +341,73 @@ If converting from duplicated functions to ES modules:
 
 ---
 
+## 2025 Update: ES Module Jest Configuration for Unit Tests
+
+### Key Changes Made
+
+- **Jest Config File:**  
+  Renamed `jest.config.js` to `jest.config.cjs` for compatibility with `"type": "module"` in `package.json`.
+  ```js
+  // jest.config.cjs
+  module.exports = {
+    testEnvironment: 'jsdom',
+    testMatch: ['**/tests/**/*.test.js'],
+    transform: {},
+    collectCoverageFrom: [
+      'src/**/*.js',
+      '!src/index.html',
+      '!**/node_modules/**',
+    ],
+    coverageThreshold: {
+      global: {
+        branches: 100,
+        functions: 100,
+        lines: 100,
+        statements: 100,
+      },
+    },
+    setupFilesAfterEnv: ['@testing-library/jest-dom'],
+    verbose: true,
+  };
+  ```
+
+- **Test Scripts in `package.json`:**  
+  All Jest scripts now use Node with the `--experimental-vm-modules` flag for ES module support:
+  ```json
+  "scripts": {
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.cjs",
+    "test:watch": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.cjs --watch",
+    "test:coverage": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.cjs --coverage",
+    "test:integration": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.cjs --testMatch='**/tests/**/*.integration.test.js'",
+    "test:e2e": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --config jest.config.cjs --testMatch='**/tests/**/*.e2e.spec.js'"
+  }
+  ```
+
+- **Test Files:**  
+  - Use `import` (not `require`) for ES modules.
+  - Use `await import('../src/script.js')` in `beforeEach` for integration tests that need to register event listeners.
+  - Remove all `jest.resetModules()` calls from ES module test files.
+
+- **Debugging in VS Code:**  
+  - Use a launch configuration with `"runtimeArgs": ["--experimental-vm-modules"]` and point to the correct Jest config file.
+
+### Troubleshooting
+
+- If you see `jest is not defined` errors, remove `jest.resetModules()` from ES module test files.
+- If you see "unexpected token 'export'" errors, ensure you use the Node command with `--experimental-vm-modules` and your config file is named `jest.config.cjs`.
+
+### Example Workflow
+
+1. Write your tests using ES module syntax (`import`/`export`).
+2. Run tests with:
+   ```
+   npm test
+   ```
+3. Debug tests in VS Code using the correct launch configuration.
+4. For browser compatibility, ensure `<script type="module" src="script.js"></script>` in your HTML.
+
+---
+
 ## Resources
 
 - [Jest ES Modules Guide](https://jestjs.io/docs/ecmascript-modules)
@@ -350,5 +417,5 @@ If converting from duplicated functions to ES modules:
 
 ---
 
-**Last Updated**: November 12, 2025  
+**Last Updated**: December 2, 2025  
 **Status**: Production-ready ES module configuration with Jest

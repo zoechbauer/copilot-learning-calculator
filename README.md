@@ -66,6 +66,7 @@ calculator/
 │   ├── TODOS-Testing.md             # Test implementation checklist
 │   ├── Migration-Plan-TypeScript.md # TypeScript migration strategy
 │   ├── TODOS-TypeScript-Migration.md
+│   ├── How-to-avoid-Copilot-Premium-Requests.md
 │   └── Copilot Coding Agent.md      # Autonomous agent guide
 ├── src/
 │   ├── index.html                   # Calculator UI
@@ -77,6 +78,10 @@ calculator/
 │   ├── theme.test.js                # Theme toggle tests (0/10)
 │   ├── keyboard.test.js             # Keyboard support (0/15)
 │   └── e2e.spec.js                  # End-to-end tests (0/18)
+├── tools/
+│   ├── backup_non_committed_files.ps1   # PowerShell backup script
+│   ├── backup_non_committed_files.txt   # Script usage instructions
+│   └── README.md                        # Tools folder documentation
 ├── jest.config.js                   # Jest test configuration
 ├── package.json                     # Dependencies & scripts
 ├── LICENSE                          # MIT License
