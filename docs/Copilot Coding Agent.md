@@ -20,7 +20,7 @@ Before using the coding agent, ensure you have:
 
 - **GitHub Copilot subscription** (Pro, Pro+, Business, or Enterprise)
 - **Write access** to your repository
-- **Coding agent enabled** on your GitHub account/organization
+- **Coding agent enabled** on your GitHub account/Copilot settings
 - **GitHub Pull Requests extension** installed in VS Code
 
 ## How the Team Workflow Works

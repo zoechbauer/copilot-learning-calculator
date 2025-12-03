@@ -233,4 +233,10 @@ if (typeof process === 'undefined' || process.env.NODE_ENV !== 'test') {
       }
     });
   }
+
+  // Make functions available for inline event handlers
+  globalThis.appendToDisplay = appendToDisplay;
+  globalThis.clearDisplay = clearDisplay;
+  globalThis.deleteLast = deleteLast;
+  globalThis.calculateResult = calculateResult;
 }
