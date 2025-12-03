@@ -40,7 +40,8 @@ describe('Theme Functionality', () => {
 
   test('Loads saved theme on init', async () => {
     localStorage.setItem('theme', 'dark');
-    await import('../src/script.js');
+    const script = await import('../src/script.js');
+    script.setupThemeToggle();
 
     expect(document.body.classList.contains('dark-mode')).toBe(true);
     const themeToggle = document.getElementById('themeToggle');

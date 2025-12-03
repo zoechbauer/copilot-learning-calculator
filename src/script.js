@@ -161,82 +161,86 @@ export function calculateResult() {
   }
 }
 
-// Initialize event listeners only if not in test environment
-if (typeof process === 'undefined' || process.env.NODE_ENV !== 'test') {
-  // Keyboard support
-  document.addEventListener('keydown', function (event) {
-    const key = event.key;
+// Initialize event listeners
+// Keyboard support
+document.addEventListener('keydown', function (event) {
+  const key = event.key;
+  const displayElement = document.getElementById('display');
+  if (!displayElement) return;
 
-    // Numbers and decimal point
-    if ((key >= '0' && key <= '9') || key === '.') {
-      appendToDisplay(key);
-    }
-
-    // Operators
-    else if (key === '+' || key === '-' || key === '/') {
-      appendToDisplay(key);
-    } else if (key === '*') {
-      appendToDisplay('*');
-    }
-
-    // Enter or equals for calculation
-    else if (key === 'Enter' || key === '=') {
-      event.preventDefault();
-      calculateResult();
-    }
-
-    // Escape or 'c' for clear
-    else if (key === 'Escape' || key.toLowerCase() === 'c') {
-      clearDisplay();
-    }
-
-    // Backspace for delete
-    else if (key === 'Backspace') {
-      event.preventDefault();
-      deleteLast();
-    }
-  });
-
-  // Prevent invalid characters from being typed
-  if (display) {
-    display.addEventListener('input', function (event) {
-      // Allow only numbers, operators, and decimal points
-      this.value = this.value.replace(/[^0-9+\-*/().×]/g, '');
-    });
+  // Numbers and decimal point
+  if ((key >= '0' && key <= '9') || key === '.') {
+    appendToDisplay(key);
   }
 
-  // Theme Toggle Functionality
+  // Operators
+  else if (key === '+' || key === '-' || key === '/') {
+    appendToDisplay(key);
+  } else if (key === '*') {
+    appendToDisplay('*');
+  }
+
+  // Enter or equals for calculation
+  else if (key === 'Enter' || key === '=') {
+    event.preventDefault();
+    calculateResult();
+  }
+
+  // Escape or 'c' for clear
+  else if (key === 'Escape' || key.toLowerCase() === 'c') {
+    clearDisplay();
+  }
+
+  // Backspace for delete
+  else if (key === 'Backspace') {
+    event.preventDefault();
+    deleteLast();
+  }
+});
+
+// Prevent invalid characters from being typed
+document.addEventListener('input', function (event) {
+  const displayElement = document.getElementById('display');
+  if (!displayElement) return;
+  displayElement.value = displayElement.value.replace(/[^0-9+\-*/().×]/g, '');
+});
+
+// Theme Toggle Functionality
+function setupThemeToggle() {
   const themeToggle = document.getElementById('themeToggle');
   const body = document.body;
+  if (!themeToggle || !body) return;
 
-  if (themeToggle && body) {
-    // Check for saved theme preference or default to light mode
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    if (savedTheme === 'dark') {
-      body.classList.add('dark-mode');
-      themeToggle.textContent = '☀️';
-    } else {
-      themeToggle.textContent = '🌙';
-    }
-
-    // Theme toggle event listener
-    themeToggle.addEventListener('click', function () {
-      body.classList.toggle('dark-mode');
-
-      // Update button icon and save preference
-      if (body.classList.contains('dark-mode')) {
-        themeToggle.textContent = '☀️';
-        localStorage.setItem('theme', 'dark');
-      } else {
-        themeToggle.textContent = '🌙';
-        localStorage.setItem('theme', 'light');
-      }
-    });
+  // Check for saved theme preference or default to light mode
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  if (savedTheme === 'dark') {
+    body.classList.add('dark-mode');
+    themeToggle.textContent = '☀️';
+  } else {
+    body.classList.remove('dark-mode');
+    themeToggle.textContent = '🌙';
   }
 
-  // Make functions available for inline event handlers
-  globalThis.appendToDisplay = appendToDisplay;
-  globalThis.clearDisplay = clearDisplay;
-  globalThis.deleteLast = deleteLast;
-  globalThis.calculateResult = calculateResult;
+  // Theme toggle event listener
+  themeToggle.onclick = function () {
+    body.classList.toggle('dark-mode');
+    if (body.classList.contains('dark-mode')) {
+      themeToggle.textContent = '☀️';
+      localStorage.setItem('theme', 'dark');
+    } else {
+      themeToggle.textContent = '🌙';
+      localStorage.setItem('theme', 'light');
+    }
+  };
 }
+
+// Call setupThemeToggle after DOM is ready
+setupThemeToggle();
+
+// Make functions available for inline event handlers
+globalThis.appendToDisplay = appendToDisplay;
+globalThis.clearDisplay = clearDisplay;
+globalThis.deleteLast = deleteLast;
+globalThis.calculateResult = calculateResult;
+
+export { setupThemeToggle };
