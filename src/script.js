@@ -1,4 +1,3 @@
-let display = document.getElementById('display');
 let currentInput = '';
 let operator = '';
 let previousInput = '';
@@ -25,14 +24,8 @@ export function getPreviousInput() {
   return previousInput;
 }
 
-// Initialize display
-if (display) {
-  display.value = '0';
-}
-
 export function appendToDisplay(value) {
-  // Get display dynamically to support testing
-  const displayElement = display || document.getElementById('display');
+  const displayElement = document.getElementById('display');
   if (!displayElement) return;
 
   if (shouldResetDisplay) {
@@ -74,7 +67,7 @@ export function appendToDisplay(value) {
 }
 
 export function clearDisplay() {
-  const displayElement = display || document.getElementById('display');
+  const displayElement = document.getElementById('display');
   if (!displayElement) return;
 
   displayElement.value = '0';
@@ -86,7 +79,7 @@ export function clearDisplay() {
 }
 
 export function deleteLast() {
-  const displayElement = display || document.getElementById('display');
+  const displayElement = document.getElementById('display');
   if (!displayElement) return;
 
   if (displayElement.value.length > 1) {
@@ -123,7 +116,7 @@ export function safeEvaluate(expression) {
 }
 
 export function calculateResult() {
-  const displayElement = display || document.getElementById('display');
+  const displayElement = document.getElementById('display');
   if (!displayElement) return;
 
   try {
@@ -187,7 +180,10 @@ document.addEventListener('keydown', function (event) {
   }
 
   // Escape or 'c' for clear
-  else if (key === 'Escape' || key.toLowerCase() === 'c') {
+  else if (
+    key === 'Escape' ||
+    (key.toLowerCase() === 'c' && !event.ctrlKey && !event.metaKey)
+  ) {
     clearDisplay();
   }
 
@@ -207,6 +203,12 @@ document.addEventListener('input', function (event) {
 
 // Theme Toggle Functionality
 function setupThemeToggle() {
+  // Ensure display shows 0 on load if empty
+  const displayElement = document.getElementById('display');
+  if (displayElement && !displayElement.value) {
+    displayElement.value = '0';
+  }
+
   const themeToggle = document.getElementById('themeToggle');
   const body = document.body;
   if (!themeToggle || !body) return;

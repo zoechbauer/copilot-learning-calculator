@@ -43,20 +43,13 @@ describe('Keyboard Event Handler', () => {
     expect(display.value).toBe('5');
   });
 
-  // This test is commented out due to jsdom/KeyboardEvent limitations.
-  // In jsdom, synthetic KeyboardEvents do not reliably trigger document-level keydown listeners for Backspace.
-  // Real browser works, but jsdom does not update the input value as expected.
-  // See: https://github.com/jsdom/jsdom/issues/2524
+  test('Backspace should delete last character', () => {
+    const display = document.getElementById('display');
+    display.value = '123';
 
-  /*
-test('Backspace should delete last character', () => {
-  const display = document.getElementById('display');
-  display.value = '123';
+    const event = new KeyboardEvent('keydown', { key: 'Backspace' });
+    document.dispatchEvent(event);
 
-  const event = new KeyboardEvent('keydown', { key: 'Backspace' });
-  document.dispatchEvent(event);
-
-  expect(display.value).toBe('12');
-});
-*/
+    expect(display.value).toBe('12');
+  });
 });
